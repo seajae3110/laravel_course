@@ -5,7 +5,7 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
        		<h1>Check Attendance {{ date('m-d-Y', strtotime($todaysDate)) }}</h1>
-
+          
           <table class='table'>
        			<thead>
        				<tr>

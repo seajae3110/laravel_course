@@ -4,20 +4,20 @@
     <div class="modal-content">
       
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Are you sure to Delete {{ $student->full_name }}?</h5>
+        <h5 class="modal-title" id="exampleModalLabel">Are you sure to Fire {{ $student->full_name }}?</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
 
-      <form action="{{ route('students.destroy', array('id'=>$student->id)) }}" method="post">
+      <form action="{{ route('students.delete', array('id'=>$student->id)) }}" method="post">
         @csrf
           <div class="modal-body">
 
           </div>
           <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-              <button type="submit" class="btn btn-danger">Delete Student </button>
+              <button type="submit" class="btn btn-danger">Fire Staff </button>
           </div>
       </form>
     </div>

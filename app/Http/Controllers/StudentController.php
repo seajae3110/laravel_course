@@ -6,13 +6,25 @@ use Illuminate\Http\Request;
 use App\Student;
 use Carbon\Carbon;
 use App\Attendance;
+use App\Patients;
 
 
 class StudentController extends Controller
 {
-    public function index(){
-    	$students = Student::all();
-    	return view('students.index', array('students' => $students));
+    public function index(Request  $request){
+        $clinical_job = 0;
+
+        if($request->clinical_job){
+            $clinical_job = $request->clinical_job;
+        }
+
+        if($clinical_job){
+            $students = Student::where('clinical_job', '=', $clinical_job)->get();
+        }
+        else{
+            $students = Student::all();
+        }
+    	return view('students.index', compact('students','clinical_job'));
     }
 
     public function addStudent(){
@@ -23,21 +35,24 @@ class StudentController extends Controller
     	$request->validate([
     		'first_name' => 'required',
     		'last_name' => 'required',
+            'clinical_job' => 'required',
     	]);
 
     	$student = new Student;
     	$student->first_name = $request->first_name;
     	$student->middle_name = $request->middle_name ? $request->middle_name : 'N/A';
     	$student->last_name = $request->last_name;
+        $student->clinical_job = $request->clinical_job;
     	$student->save();
 
-    	return redirect()->route('students.index')->withStatus('Student Added.');
+    	return redirect()->route('students.staffs')->withStatus('Staff Added.');
     }
 
-    public function update(Request $request){
+    public function updateStaff(Request $request){
         $request->validate([
             'first_name' => 'required',
-            'last_name' => 'required'
+            'last_name' => 'required',
+            'clinical_job' => 'required'
         ]);
 
 
@@ -46,22 +61,23 @@ class StudentController extends Controller
             $student->first_name = $request->first_name;
             $student->last_name = $request->last_name;
             $student->middle_name = $request->middle_name ? $request->middle_name : 'N/A';
+            $student->clinical_job = $request->clinical_job;
             $student->save();
         }
 
-        return redirect()->back()->withStatus('Student Updated!');
+        return redirect()->back()->withStatus('Staff Updated!');
         
         }
 
-        public function destroy(Request $request){
-            $student = Student::find($request->id);
+    public function destroyStaff(Request $request){
+        $student = Student::find($request->id);
 
             if($student){
                 $student->delete();
             }
 
-            return redirect()->back()->withStatus('Student Deleted.');
-        }
+        return redirect()->back()->withStatus('Staff Fired!');
+    }
 
 
     public function checkAttendance(){
@@ -114,5 +130,44 @@ class StudentController extends Controller
         return view('students.attendance-report', compact('dates', 'students'));
     }
 
+    public function display(){
+        return view('students.display_report');
+    }
+
+    public function staff(Request  $request){ 
+        $clinical_job = 0;
+
+        if($request->clinical_job){
+            $clinical_job = $request->clinical_job;
+        }
+
+        if($clinical_job){
+            $students = Student::where('clinical_job', '=', $clinical_job)->get();
+        }
+        else{
+            $students = Student::all();
+        }
+        return view('students.staffs', compact('students','clinical_job'));
+    }
+                                    /**P A T I E N T S */
+    public function storePatient(Request $request){
+    	$request->validate([
+    		'first_name' => 'required',
+    		'last_name' => 'required',
+            'reasons' => 'required',
+            'senior' => 'required'
+    	]);
+
+    	$patient = new Patients;
+    	$patient->first_name = $request->first_name;
+    	$patient->middle_name = $request->middle_name ? $request->middle_name : 'N/A';
+    	$patient->last_name = $request->last_name;
+        $patient->reasons = $request->reasons;
+        $patient->senior = $request->senior;
+    	$patient->save();
+
+    	return redirect()->route('students.patients')->withStatus('Patient Added.');
+    }
+    
 }
 

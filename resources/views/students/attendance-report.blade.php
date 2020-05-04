@@ -4,14 +4,14 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
-       		<h1>Students</h1>
+       		<h1>Hospital Staffs</h1>
         
 
           <table class='table'>
        			<thead>
        				<tr>
        					<th>#</th>
-       					<th>Students</th>
+       					<th>Employees</th>
 
                 @foreach($dates as $date)
                     <th>{{ $date }}</th>
@@ -20,12 +20,14 @@
        			</thead>
        			<tbody>
                 @foreach($students as $student)
-                    <th>{{ $loop->iteration }}</th>
-                    <th>{{ $student->full_name }}}</th>
+                    <tr>
+                    <td>{{ $loop->iteration }}</td>
+                    <td>{{ $student->full_name }}</td>
 
                     @foreach($dates as $date)
-                      <th>{{ $student->attendance($date) }}</th>
+                      <td>@if($student->is_present($date))<i class="fa fa-check"></i>@else<i class="fa fa-times"></i>@endif</td>
                     @endforeach
+                    <tr>
                 @endforeach
        			</tbody>
        			</tbody>
